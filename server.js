@@ -30,9 +30,22 @@ app.get("/allcards", async (req, res) => {
 	} catch (error) {
 		res.status(500).json({ error: "Failed to fetch cards" });
 		console.error(error);
-	} finally {
-		if (connection) {
-			await connection.end();
-		}
+	}
+});
+
+app.post("/addcard", async (req, res) => {
+	const { card_name, card_pic } = req.body;
+	try {
+		let connection = await mysql.createConnection(dbConfig);
+		const [result] = await connection.execute(
+			"INSERT INTO defaultdb.cards (card_name, card_pic) VALUES (?, ?)",
+			[card_name, card_pic]
+		);
+		res
+			.status(201)
+			.json({ message: "Card added successfully", card_id: result.insertId });
+	} catch (error) {
+		res.status(500).json({ error: `Failed to add card ${card_name}` });
+		console.error(error);
 	}
 });
