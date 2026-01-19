@@ -49,3 +49,27 @@ app.post("/addcard", async (req, res) => {
 		console.error(error);
 	}
 });
+
+app.delete("/deletecard", async (req, res) => {
+	const { card_id } = req.body;
+	try {
+		let connection = await mysql.createConnection(dbConfig);
+		const [result] = await connection.execute("DELETE FROM defaultdb.cards WHERE card_id = ?", [card_id]);
+		res.json({ message: "Card deleted successfully" });
+	} catch (error) {
+		res.status(500).json({ error: "Failed to delete card" });
+		console.error(error);
+	}
+});
+
+app.put("/updatecard", async (req, res) => {
+	const { card_id, card_name, card_pic } = req.body;
+	try {
+		let connection = await mysql.createConnection(dbConfig);
+		const [result] = await connection.execute("UPDATE defaultdb.cards SET card_name = ?, card_pic = ? WHERE card_id = ?", [card_name, card_pic, card_id]);
+		res.json({ message: "Card updated successfully" });
+	} catch (error) {
+		res.status(500).json({ error: "Failed to update card" });
+		console.error(error);
+	}
+});
