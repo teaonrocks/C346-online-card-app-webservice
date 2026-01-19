@@ -50,12 +50,12 @@ app.post("/addcard", async (req, res) => {
 	}
 });
 
-app.delete("/deletecard", async (req, res) => {
-	const { card_id } = req.body;
+app.delete("/deletecard/:card_id", async (req, res) => {
+	const card_id = req.params.card_id;
 	try {
 		let connection = await mysql.createConnection(dbConfig);
 		const [result] = await connection.execute("DELETE FROM defaultdb.cards WHERE card_id = ?", [card_id]);
-		res.json({ message: "Card deleted successfully" });
+		res.json({ message: "Card deleted successfully", card_id: card_id });
 	} catch (error) {
 		res.status(500).json({ error: "Failed to delete card" });
 		console.error(error);
