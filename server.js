@@ -75,10 +75,10 @@ app.post("/addcard", async (req, res) => {
 });
 
 app.delete("/deletecard/:card_id", async (req, res) => {
-	const card_id = req.params.card_id;
+	const id = req.params.card_id;
 	try {
 		let connection = await mysql.createConnection(dbConfig);
-		const [result] = await connection.execute("DELETE FROM defaultdb.cards WHERE id = ?", [card_id]);
+		const [result] = await connection.execute("DELETE FROM defaultdb.cards WHERE id = ?", [id]);
 		res.json({ message: "Card deleted successfully", card_id: card_id });
 	} catch (error) {
 		res.status(500).json({ error: "Failed to delete card" });
@@ -87,12 +87,12 @@ app.delete("/deletecard/:card_id", async (req, res) => {
 });
 
 app.put("/updatecard/:card_id", async (req, res) => {
-	const card_id = req.params.card_id;
+	const id = req.params.card_id;
 	const { card_name, card_pic } = req.body;
 	try {
 		let connection = await mysql.createConnection(dbConfig);
-		const [result] = await connection.execute("UPDATE defaultdb.cards SET card_name = ?, card_pic = ? WHERE id = ?", [card_name, card_pic, card_id]);
-		res.json({ message: "Card updated successfully", card_id: card_id });
+		const [result] = await connection.execute("UPDATE defaultdb.cards SET card_name = ?, card_pic = ? WHERE id = ?", [card_name, card_pic, id]);
+		res.json({ message: "Card updated successfully", card_id: id });
 	} catch (error) {
 		res.status(500).json({ error: "Failed to update card" });
 		console.error(error);
